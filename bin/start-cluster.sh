@@ -1,11 +1,12 @@
 #! /bin/bash
 
 set -e
-
+DOCKER_HOST="tcp://127.0.0.1:2375"
+DOCKER_RIAK_CLUSTER_SIZE=2
 if env | grep -q "DOCKER_RIAK_DEBUG"; then
   set -x
 fi
-
+echo "${DOCKER_HOST}"
 if [ -z "${DOCKER_HOST}" ]; then
   echo ""
   echo "It looks like the environment variable DOCKER_HOST has not"
@@ -15,7 +16,7 @@ if [ -z "${DOCKER_HOST}" ]; then
   echo "  export DOCKER_HOST=\"tcp://127.0.0.1:2375\""
   echo ""
 
-  exit 1
+#  exit 1
 fi
 
 if [[ "${DOCKER_HOST}" == unix://* ]]; then
