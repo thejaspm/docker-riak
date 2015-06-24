@@ -84,7 +84,7 @@ do
                -e "DOCKER_RIAK_BACKEND=${DOCKER_RIAK_BACKEND}" \
                -p $publish_http_port \
                -p $publish_pb_port \
-               -v $BASE_HOST_STORAGE+"${index}":/var/lib/riak \
+               -v $BASE_HOST_STORAGE"${index}":/var/lib/riak \
                --link "riak01:seed" \
                --name "riak${index}" \
                -d hectcastro/riak > /dev/null 2>&1
@@ -94,7 +94,7 @@ do
                -e "DOCKER_RIAK_BACKEND=${DOCKER_RIAK_BACKEND}" \
                -p $publish_http_port \
                -p $publish_pb_port \
-               -v $BASE_HOST_STORAGE+"${index}":/var/lib/riak \
+               -v $BASE_HOST_STORAGE"${index}":/var/lib/riak \
                --name "riak${index}" \
                -d hectcastro/riak > /dev/null 2>&1
   fi
