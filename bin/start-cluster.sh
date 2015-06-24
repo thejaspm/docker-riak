@@ -1,17 +1,18 @@
 #! /bin/bash
 
 set -e
-if [ $# -ne 3 ]
+if [ $# -ne 4 ]
   then
     echo "No arguments supplied correctly"
-    echo "start-cluster.sh DOCKER_RIAK_CLUSTER_SIZE DOCKER_RIAK_AUTOMATIC_CLUSTERING BASE_EXPOSED_PORT"
-    echo "start-cluster.sh 3 1 9000"
+    echo "start-cluster.sh DOCKER_RIAK_CLUSTER_SIZE DOCKER_RIAK_AUTOMATIC_CLUSTERING BASE_EXPOSED_PORT BASE_HOST_STORAGE"
+    echo "start-cluster.sh 3 1 9000 /mnt/mediaServer/"
 fi
 
 DOCKER_HOST="tcp://127.0.0.1:2375"
 DOCKER_RIAK_CLUSTER_SIZE=$1
 DOCKER_RIAK_AUTOMATIC_CLUSTERING=$2
 BASE_EXPOSED_PORT=$3
+BASE_HOST_STORAGE=$4
 if env | grep -q "DOCKER_RIAK_DEBUG"; then
   set -x
 fi
@@ -83,6 +84,7 @@ do
                -e "DOCKER_RIAK_BACKEND=${DOCKER_RIAK_BACKEND}" \
                -p $publish_http_port \
                -p $publish_pb_port \
+               -v $BASE_HOST_STORAGE+"${index}":/var/lib/riak \
                --link "riak01:seed" \
                --name "riak${index}" \
                -d hectcastro/riak > /dev/null 2>&1
@@ -92,6 +94,7 @@ do
                -e "DOCKER_RIAK_BACKEND=${DOCKER_RIAK_BACKEND}" \
                -p $publish_http_port \
                -p $publish_pb_port \
+               -v $BASE_HOST_STORAGE+"${index}":/var/lib/riak \
                --name "riak${index}" \
                -d hectcastro/riak > /dev/null 2>&1
   fi
