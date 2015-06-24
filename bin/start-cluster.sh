@@ -1,17 +1,17 @@
 #! /bin/bash
 
 set -e
-if [ $# -ne 2 ]
+if [ $# -ne 3 ]
   then
     echo "No arguments supplied correctly"
-    echo "start-cluster.sh DOCKER_RIAK_CLUSTER_SIZE DOCKER_RIAK_AUTOMATIC_CLUSTERING"
-    echo "start-cluster.sh 3 1"
+    echo "start-cluster.sh DOCKER_RIAK_CLUSTER_SIZE DOCKER_RIAK_AUTOMATIC_CLUSTERING BASE_EXPOSED_PORT"
+    echo "start-cluster.sh 3 1 9000"
 fi
 
 DOCKER_HOST="tcp://127.0.0.1:2375"
 DOCKER_RIAK_CLUSTER_SIZE=$1
 DOCKER_RIAK_AUTOMATIC_CLUSTERING=$2
-
+BASE_EXPOSED_PORT=$3
 if env | grep -q "DOCKER_RIAK_DEBUG"; then
   set -x
 fi
@@ -66,7 +66,7 @@ publish_pb_port="8087"
 # defaults to 100.
 
 DOCKER_RIAK_PROTO_BUF_PORT_OFFSET=${DOCKER_RIAK_PROTO_BUF_PORT_OFFSET:-100}
-
+DOCKER_RIAK_BASE_HTTP_PORT=$((BASE_EXPOSED_PORT - index))
 for index in $(seq -f "%02g" "1" "${DOCKER_RIAK_CLUSTER_SIZE}");
 do
 
