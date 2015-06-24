@@ -1,9 +1,17 @@
 #! /bin/bash
 
 set -e
+if [ $# -ne 2 ]
+  then
+    echo "No arguments supplied correctly"
+    echo "start-cluster.sh DOCKER_RIAK_CLUSTER_SIZE DOCKER_RIAK_AUTOMATIC_CLUSTERING"
+    echo "start-cluster.sh 3 1"
+fi
+
 DOCKER_HOST="tcp://127.0.0.1:2375"
-DOCKER_RIAK_CLUSTER_SIZE=4
-DOCKER_RIAK_AUTOMATIC_CLUSTERING=1
+DOCKER_RIAK_CLUSTER_SIZE=$1
+DOCKER_RIAK_AUTOMATIC_CLUSTERING=$2
+
 if env | grep -q "DOCKER_RIAK_DEBUG"; then
   set -x
 fi
@@ -35,7 +43,7 @@ if docker ps -a | grep "hectcastro/riak" >/dev/null; then
   echo "Please take them down before attempting to bring up another"
   echo "cluster with the following command:"
   echo ""
-  echo "  make stop-cluster"
+  echo "  bash stop-cluster.sh"
   echo ""
 
   exit 1
